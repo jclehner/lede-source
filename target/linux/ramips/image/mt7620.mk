@@ -82,10 +82,9 @@ define Device/ex3700
   NETGEAR_BOARD_ID := U12H319T00_NETGEAR
   DTS := EX3700
   BLOCKSIZE := 4k
-  KERNEL := $(KERNEL_DTB) | uImage lzma | pad-to 64k
+  KERNEL := $(KERNEL_DTB) | uImage lzma
   IMAGES += factory.bin
-  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | \
-	netgear-chk
+  IMAGE/factory.bin := append-kernel | netgear-chk | append-rootfs
   DEVICE_TITLE := Netgear EX3700
 endef
 TARGET_DEVICES += ex3700
