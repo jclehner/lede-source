@@ -42,7 +42,7 @@ struct chk_header {
 	uint32_t image_chksum;
 	uint32_t header_chksum;
 	/* char board_id[] - upto MAX_BOARD_ID_LEN */
-};
+} __attribute__((packed));
 
 static void __attribute__ ((format (printf, 2, 3)))
 fatal_error (int maybe_errno, const char * format, ...)
@@ -130,6 +130,7 @@ main (int argc, char * argv[])
 	FILE * out_fp, * kern_fp, * fs_fp;
 	char * board_id;
 	unsigned long region;
+	int list, i;
 
 	/* Default values */
 	board_id = "U12H072T00_NETGEAR";
@@ -138,8 +139,9 @@ main (int argc, char * argv[])
 	kern_file = NULL;
 	fs_file = NULL;
 	fs_fp = NULL;
+	list = 0;
 
-	while ((opt = getopt (argc, argv, ":b:r:k:f:o:h")) != -1) {
+	while ((opt = getopt (argc, argv, ":b:r:k:f:o:l:h")) != -1) {
 		switch (opt) {
 		    case 'b':
 		    	/* Board Identity */
@@ -161,6 +163,10 @@ main (int argc, char * argv[])
 				fatal_error (0, "Region cannot exceed 0xff");
 			}
 			break;
+
+			case 'l':
+			list = 1;
+			/* fall through */
 
 		    case 'k':
 		    	/* Kernel */
@@ -201,7 +207,7 @@ main (int argc, char * argv[])
 		print_help ();
 		fatal_error (0, "Kernel file expected");
 	}
-	if (!output_file) {
+	if (!output_file && !list) {
 		print_help ();
 		fatal_error (0, "Output file required");
 	}
@@ -211,6 +217,42 @@ main (int argc, char * argv[])
 	kern_fp = fopen (kern_file, "r");
 	if (!kern_fp) {
 		fatal_error (errno, "Cannot open %s", kern_file);
+	}
+
+	/* Allocate storage for header, we fill in as we go */
+	hdr = malloc (sizeof (struct chk_header));
+	if (!hdr) {
+		fatal_error (0, "malloc failed");
+	}
+	bzero (hdr, sizeof (struct chk_header));
+
+	if (list) {
+		if (fread (hdr, sizeof (struct chk_header), 1, kern_fp) != 1) {
+			fatal_error (errno, "Cannot read %s", kern_file);
+		}
+
+		if (ntohl (hdr->magic) != 0x2a23245e) {
+			message ("Bad magic 0x%08x", ntohl (hdr->magic));
+		}
+
+		fread (buf, MAX_BOARD_ID_LEN, 1, kern_fp);
+
+		printf("Board            : %s\n", buf);
+		printf("Header Checksum  : %08x\n", ntohl(hdr->header_chksum));
+		printf("Image Checksum   : %08x\n", ntohl(hdr->image_chksum));
+
+		printf("Reserved         :");
+
+		for (i = 0; i != 8; ++i) {
+			printf(" %02x", hdr->reserved[i]);
+		}
+
+		printf("\nKernel Checksum  : 0x%08x\n", ntohl (hdr->kernel_chksum));
+		printf("       Size      : %u\n", ntohl(hdr->kernel_len));
+		printf("Rootfs Checksum  : 0x%08x\n", ntohl (hdr->rootfs_chksum));
+		printf("       Size      : %u\n", ntohl(hdr->rootfs_len));
+
+		return 0;
 	}
 
 	/* Open the fs file, if specified */
@@ -233,13 +275,6 @@ main (int argc, char * argv[])
 	if (fwrite (buf, 1, header_len, out_fp) != header_len) {
 		fatal_error (errno, "Cannot write header");
 	}
-
-	/* Allocate storage for header, we fill in as we go */
-	hdr = malloc (sizeof (struct chk_header));
-	if (!hdr) {
-		fatal_error (0, "malloc failed");
-	}
-	bzero (hdr, sizeof (struct chk_header));
 
 	/* Fill in known values */
 	hdr->magic = htonl (0x2a23245e);
