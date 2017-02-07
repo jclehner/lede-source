@@ -12,7 +12,8 @@
 	model = "Netgear EX3700";
 
 	chosen {
-		bootargs = "console=ttyS0,57600";
+		/*bootargs = "console=ttyS0,57600"*/
+		bootargs = "console=ttyS0,57600 loglevel=7 netconsole=6665@192.168.1.1/eth0,6666@192.168.1.2/";
 	};
 
 	/*
