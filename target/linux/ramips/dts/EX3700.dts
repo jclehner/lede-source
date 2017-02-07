@@ -20,24 +20,43 @@
 		compatible = "gpio-leds";
 
 		power_g {
-			label = "ex3700:green:power";
-			gpios = <&gpio2 23 GPIO_ACTIVE_LOW>;
+			label = "wn3000rpv3:green:power";
+			gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 			default-state = "on";
 		};
 
-		power_a {
-			label = "ex3700:amber:power";
-			gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;
-			default-state = "on"; /* FIXME */
+		power_r {
+			label = "wn3000rpv3:red:power";
+			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+		};
+
+		client_g {
+			label = "wn3000rpv3:green:client";
+			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+		};
+
+		client_r {
+			label = "wn3000rpv3:red:client";
+			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
+		};
+
+		router_g {
+			label = "wn3000rpv3:green:router";
+			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+		};
+
+		router_r {
+			label = "wn3000rpv3:red:router";
+			gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
 		};
 
 		wps {
-			label = "ex3700:green:wps";
-			gpios = <&gpio2 27 GPIO_ACTIVE_LOW>;
-			default-state = "on"; /* FIXME */
+			label = "wn3000rpv3:green:wps";
+			gpios = <&gpio1 15 GPIO_ACTIVE_LOW>;
 		};
 	};
 
+/*
 	gpio-keys-polled {
 		compatible = "gpio-keys-polled";
 		#address-cells = <1>;
@@ -56,15 +75,18 @@
 			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
+*/
 };
 
-&gpio0 {
+&gpio1 {
 	status = "okay";
 };
 
+/*
 &gpio2 {
 	status = "okay";
 };
+*/
 
 &spi0 {
 	status = "okay";
@@ -114,7 +136,6 @@
 };
 */
 
-/*
 &pinctrl {
 	state_default: pinctrl0 {
 		default {
@@ -123,4 +144,3 @@
 		};
 	};
 };
-*/
