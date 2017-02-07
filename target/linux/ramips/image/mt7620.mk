@@ -20,6 +20,10 @@ define Build/zyimage
 	$(STAGING_DIR_HOST)/bin/zyimage $(1) $@
 endef
 
+define Build/uImage-ex3700
+	$(call Build/uImage,lzma,-S $$(expr 64 + `stat -c%s $(IMAGE_KERNEL)`))
+endef
+
 define Device/ArcherC20i
   DTS := ArcherC20i
   SUPPORTED_DEVICES := c20i
@@ -82,9 +86,9 @@ define Device/ex3700
   NETGEAR_BOARD_ID := U12H319T00_NETGEAR
   DTS := EX3700
   BLOCKSIZE := 4k
-  KERNEL := $(KERNEL_DTB) | uImage lzma
+  KERNEL := $(KERNEL_DTB)
   IMAGES += factory.bin
-  IMAGE/factory.bin := append-kernel | append-rootfs | netgear-chk
+  IMAGE/factory.bin := append-kernel | append-rootfs | uImage-ex3700 | netgear-chk
   DEVICE_TITLE := Netgear EX3700
 endef
 TARGET_DEVICES += ex3700
