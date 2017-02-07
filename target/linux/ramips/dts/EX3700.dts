@@ -109,7 +109,7 @@
 			read-only;
 		};
 
-		partition@30000 {
+		nvram: partition@30000 {
 			label = "nvram";
 			reg = <0x30000 0x10000>;
 			read-only;
@@ -130,6 +130,7 @@
 	};
 };
 
+/*
 &ethernet {
 	mtd-mac-address = <&factory 0x0>;
 };
@@ -138,6 +139,7 @@
 	mtd-mac-address = <&factory 0x6>;
 	ralink,mtd-eeprom = <&factory 0x1000>;
 };
+*/
 
 /*
 &pinctrl {
