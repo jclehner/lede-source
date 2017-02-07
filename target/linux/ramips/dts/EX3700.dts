@@ -16,54 +16,25 @@
 		bootargs = "console=ttyS0,57600 loglevel=7 netconsole=6665@192.168.1.1/eth0,6666@192.168.1.2/";
 	};
 
-	/*
 	gpio-leds {
 		compatible = "gpio-leds";
 
 		power_g {
-			label = "wn3000rpv3:green:power";
-			gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+			label = "ex3700:green:power";
+			gpios = <&gpio2 23 GPIO_ACTIVE_LOW>;
 			default-state = "on";
 		};
 
-		power_r {
-			label = "wn3000rpv3:red:power";
-			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
-		};
-
-		client_g {
-			label = "wn3000rpv3:green:client";
-			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-		};
-
-		client_r {
-			label = "wn3000rpv3:red:client";
-			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
-		};
-
-		router_g {
-			label = "wn3000rpv3:green:router";
-			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
-		};
-
-		router_r {
-			label = "wn3000rpv3:red:router";
-			gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
+		power_a {
+			label = "ex3700:amber:power";
+			gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;
+			default-state = "on"; /* FIXME */
 		};
 
 		wps {
-			label = "wn3000rpv3:green:wps";
-			gpios = <&gpio1 15 GPIO_ACTIVE_LOW>;
-		};
-
-		l_arrow {
-			label = "wn3000rpv3:blue:leftarrow";
-			gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
-		};
-
-		r_arrow {
-			label = "wn3000rpv3:blue:rightarrow";
-			gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
+			label = "ex3700:green:wps";
+			gpios = <&gpio2 27 GPIO_ACTIVE_LOW>;
+			default-state = "on"; /* FIXME */
 		};
 	};
 
@@ -75,7 +46,7 @@
 
 		reset {
 			label = "reset";
-			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio2 26 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 
@@ -85,14 +56,15 @@
 			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
-*/
 };
 
-/*
-&gpio1 {
+&gpio0 {
 	status = "okay";
 };
-*/
+
+&gpio2 {
+	status = "okay";
+};
 
 &spi0 {
 	status = "okay";
