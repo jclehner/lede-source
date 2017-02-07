@@ -104,32 +104,54 @@
 			read-only;
 		};
 
-		nvram: partition@30000 {
-			label = "nvram";
+		partition@30000 {
+			label = "config";
 			reg = <0x30000 0x10000>;
 			read-only;
 		};
 
-		factory: partition@40000 {
+		partition@40000 {
 			label = "factory";
 			reg = <0x40000 0x10000>;
 			read-only;
 		};
 
+/*
 		partition@50000 {
 			label = "firmware";
-			reg = <0x50000 0x7b0000>;
-			/* better safe than sorry */
+			reg = <0x50000 0x790000>;
+		};
+*/
+		partition@50000 {
+			label = "firmware";
+			reg = <0x50000 0x680000>;
+		};
+
+		partition@6d0000 {
+			label = "stuff";
+			reg = <0x6d0000 0x110000>;
 			read-only;
 		};
+
+		partition@7e0000 {
+			label = "board_data";
+			reg = <0x7e0000 0x10000>;
+			read-only;
+		};
+
+		partition@7f0000 {
+			label = "nvram";
+			reg = <0x7f0000 0x10000>;
+			read-only;
+		}
 	};
 };
 
+/*
 &ethernet {
 	mtd-mac-address = <&factory 0x0>;
 };
 
-/*
 &wmac {
 	mtd-mac-address = <&factory 0x6>;
 	ralink,mtd-eeprom = <&factory 0x1000>;
