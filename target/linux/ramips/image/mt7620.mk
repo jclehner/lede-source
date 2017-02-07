@@ -84,7 +84,7 @@ define Device/ex3700
   BLOCKSIZE := 4k
   KERNEL := $(KERNEL_DTB) | uImage lzma
   IMAGES += factory.bin
-  IMAGE/factory.bin := append-kernel | netgear-chk | append-rootfs
+  IMAGE/factory.bin := append-kernel | append-rootfs | netgear-chk
   DEVICE_TITLE := Netgear EX3700
 endef
 TARGET_DEVICES += ex3700
