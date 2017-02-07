@@ -103,11 +103,11 @@
 	};
 };
 
-/*
 &ethernet {
 	mtd-mac-address = <&factory 0x0>;
 };
 
+/*
 &wmac {
 	mtd-mac-address = <&factory 0x6>;
 	ralink,mtd-eeprom = <&factory 0x1000>;
