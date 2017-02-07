@@ -1,0 +1,74 @@
+Index: u-boot-2014.10/tools/default_image.c
+===================================================================
+--- u-boot-2014.10.orig/tools/default_image.c	2017-02-07 09:21:46.375810778 +0100
++++ u-boot-2014.10/tools/default_image.c	2017-02-07 09:25:41.058487405 +0100
+@@ -20,6 +20,14 @@
+ 
+ static image_header_t header;
+ 
++static void image_set_kernsize(image_header_t *hdr, uint32_t size)
++{
++	/* truncate image name */
++	hdr->ih_name[IH_NMLEN - 5] = '\0';
++	/* kernel size resides in the last 4 bytes of the header */
++	*(uint32_t *)(hdr->ih_name + IH_NMLEN - 4) = cpu_to_be32(size);
++}
++
+ static int image_check_image_types(uint8_t type)
+ {
+ 	if (((type > IH_TYPE_INVALID) && (type < IH_TYPE_FLATDT)) ||
+@@ -130,6 +138,10 @@
+ 
+ 	image_set_name(hdr, params->imagename);
+ 
++	if (params->kernsize) {
++		image_set_kernsize(hdr, params->kernsize);
++	}
++
+ 	checksum = crc32(0, (const unsigned char *)hdr,
+ 				sizeof(image_header_t));
+ 
+Index: u-boot-2014.10/tools/mkimage.c
+===================================================================
+--- u-boot-2014.10.orig/tools/mkimage.c	2017-02-07 09:21:46.375810778 +0100
++++ u-boot-2014.10/tools/mkimage.c	2017-02-07 09:22:58.036603101 +0100
+@@ -270,6 +270,17 @@
+ 			case 's':
+ 				params.skipcpy = 1;
+ 				break;
++			case 'S':
++				if (--argc <= 0)
++					usage ();
++				params.kernsize = strtoul (*++argv, &ptr, 10);
++				if (*ptr) {
++					fprintf (stderr,
++						"%s: invalid kernel size %s\n",
++						params.cmdname, *argv);
++					exit (EXIT_FAILURE);
++				}
++				goto NXTARG;
+ 			case 'v':
+ 				params.vflag++;
+ 				break;
+@@ -645,7 +656,8 @@
+ 			 "          -e ==> set entry point to 'ep' (hex)\n"
+ 			 "          -n ==> set image name to 'name'\n"
+ 			 "          -d ==> use image data from 'datafile'\n"
+-			 "          -x ==> set XIP (execute in place)\n",
++			 "          -x ==> set XIP (execute in place)\n"
++			 "          -S ==> set kernel size\n",
+ 		params.cmdname);
+ 	fprintf(stderr, "       %s [-D dtc_options] [-f fit-image.its|-F] fit-image\n",
+ 		params.cmdname);
+Index: u-boot-2014.10/tools/imagetool.h
+===================================================================
+--- u-boot-2014.10.orig/tools/imagetool.h	2017-02-07 09:21:46.375810778 +0100
++++ u-boot-2014.10/tools/imagetool.h	2017-02-07 09:21:46.371810734 +0100
+@@ -58,6 +58,7 @@
+ 	const char *keydest;	/* Destination .dtb for public key */
+ 	const char *comment;	/* Comment to add to signature node */
+ 	int require_keys;	/* 1 to mark signing keys as 'required' */
++	int kernsize;
+ };
+ 
+ /*
