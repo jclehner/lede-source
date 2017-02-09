@@ -21,7 +21,7 @@ define Build/zyimage
 endef
 
 define Build/uImage-ex3700
-	$(call Build/uImage,lzma,-S $$(expr 64 + `stat -c%s $(IMAGE_KERNEL)`))
+	$(call Build/uImage,lzma,-Z $$(expr 64 + `stat -c%s $(IMAGE_KERNEL)`))
 endef
 
 define Device/ArcherC20i

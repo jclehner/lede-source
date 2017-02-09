@@ -1,7 +1,7 @@
 Index: u-boot-2014.10/tools/default_image.c
 ===================================================================
---- u-boot-2014.10.orig/tools/default_image.c	2017-02-07 09:21:46.375810778 +0100
-+++ u-boot-2014.10/tools/default_image.c	2017-02-07 09:25:41.058487405 +0100
+--- u-boot-2014.10.orig/tools/default_image.c	2017-02-09 21:44:09.418152571 +0100
++++ u-boot-2014.10/tools/default_image.c	2017-02-09 21:44:09.414152526 +0100
 @@ -20,6 +20,14 @@
  
  static image_header_t header;
@@ -30,13 +30,13 @@ Index: u-boot-2014.10/tools/default_image.c
  
 Index: u-boot-2014.10/tools/mkimage.c
 ===================================================================
---- u-boot-2014.10.orig/tools/mkimage.c	2017-02-07 09:21:46.375810778 +0100
-+++ u-boot-2014.10/tools/mkimage.c	2017-02-07 09:22:58.036603101 +0100
-@@ -270,6 +270,17 @@
- 			case 's':
- 				params.skipcpy = 1;
+--- u-boot-2014.10.orig/tools/mkimage.c	2017-02-09 21:44:09.418152571 +0100
++++ u-boot-2014.10/tools/mkimage.c	2017-02-09 21:50:16.558338437 +0100
+@@ -279,6 +279,17 @@
+ 			case 'x':
+ 				params.xflag++;
  				break;
-+			case 'S':
++			case 'Z':
 +				if (--argc <= 0)
 +					usage ();
 +				params.kernsize = strtoul (*++argv, &ptr, 10);
@@ -47,23 +47,23 @@ Index: u-boot-2014.10/tools/mkimage.c
 +					exit (EXIT_FAILURE);
 +				}
 +				goto NXTARG;
- 			case 'v':
- 				params.vflag++;
- 				break;
+ 			default:
+ 				usage ();
+ 			}
 @@ -645,7 +656,8 @@
  			 "          -e ==> set entry point to 'ep' (hex)\n"
  			 "          -n ==> set image name to 'name'\n"
  			 "          -d ==> use image data from 'datafile'\n"
 -			 "          -x ==> set XIP (execute in place)\n",
 +			 "          -x ==> set XIP (execute in place)\n"
-+			 "          -S ==> set kernel size\n",
++			 "          -Z ==> set kernel size in bytes\n",
  		params.cmdname);
  	fprintf(stderr, "       %s [-D dtc_options] [-f fit-image.its|-F] fit-image\n",
  		params.cmdname);
 Index: u-boot-2014.10/tools/imagetool.h
 ===================================================================
---- u-boot-2014.10.orig/tools/imagetool.h	2017-02-07 09:21:46.375810778 +0100
-+++ u-boot-2014.10/tools/imagetool.h	2017-02-07 09:21:46.371810734 +0100
+--- u-boot-2014.10.orig/tools/imagetool.h	2017-02-09 21:44:09.418152571 +0100
++++ u-boot-2014.10/tools/imagetool.h	2017-02-09 21:44:09.414152526 +0100
 @@ -58,6 +58,7 @@
  	const char *keydest;	/* Destination .dtb for public key */
  	const char *comment;	/* Comment to add to signature node */
