@@ -56,11 +56,18 @@
 	};
 };
 
-&gpio1 {
+// pins 0-23
+&gpio0 {
 	status = "okay";
 };
 
+// pins 40-71
 &gpio2 {
+	status = "okay";
+};
+
+// pins 72-73
+&gpio3 {
 	status = "okay";
 };
 
@@ -159,6 +166,9 @@
 &pinctrl {
 	state_default: pinctrl0 {
 		default {
+			//    i2c: pin 2
+			// rgmii2: pins 60-71
+			//   wled: pin 72
 			ralink,group = "i2c", "rgmii2", "wled";
 			ralink,function = "gpio";
 		};
