@@ -123,6 +123,7 @@
 	};
 };
 
+/*
 &pcie {
 	status = "okay";
 
@@ -131,23 +132,26 @@
 			compatible = "pci14c3,7662";
 			reg = <0x0000 0 0 0 0 >;
 			mediatek,mtd-eeprom = <&factory 0x8000>;
+			mtd-mac-address = <&factory 0x8004>;
 			ieee80211-freq-limit = <5000000 6000000>;
 		};
 	};
 };
+*/
 
 &ethernet {
-	mtd-mac-address = <&factory 0x2e>;
+	mtd-mac-address = <&factory 0x28>;
 };
 
 &wmac {
 	ralink,mtd-eeprom = <&factory 0x0>;
+	mtd-mac-address = <&factory 0x4>;
 };
 
 &pinctrl {
 	state_default: pinctrl0 {
 		default {
-			ralink,group = "i2c", "rgmii2";
+			ralink,group = "i2c", "rgmii2", "wled";
 			ralink,function = "gpio";
 		};
 	};
