@@ -16,6 +16,7 @@
 		bootargs = "console=ttyS0,57600 loglevel=7 netconsole=6665@192.168.1.1/eth0,6666@192.168.1.2/";
 	};
 
+	/*
 	gpio-leds {
 		compatible = "gpio-leds";
 
@@ -54,8 +55,10 @@
 			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
+	*/
 };
 
+/*
 // pins 0-23
 &gpio0 {
 	status = "okay";
@@ -70,6 +73,7 @@
 &gpio3 {
 	status = "okay";
 };
+*/
 
 &ohci {
 	status = "okay";
