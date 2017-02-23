@@ -173,7 +173,8 @@
 			//    i2c: pin 2
 			// rgmii2: pins 60-71
 			//   wled: pin 72
-			ralink,group = "i2c", "rgmii2", "wled";
+			//ralink,group = "i2c", "rgmii2", "wled";
+			ralink,group = "i2c", "rgmii2";
 			ralink,function = "gpio";
 		};
 	};
