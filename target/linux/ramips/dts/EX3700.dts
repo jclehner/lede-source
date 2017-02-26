@@ -12,11 +12,9 @@
 	model = "Netgear EX3700";
 
 	chosen {
-		/*bootargs = "console=ttyS0,57600"*/
-		bootargs = "console=ttyS0,57600 loglevel=7 netconsole=6665@192.168.1.1/eth0,6666@192.168.1.2/";
+		bootargs = "console=ttyS0,57600";
 	};
 
-	/*
 	gpio-leds {
 		compatible = "gpio-leds";
 
@@ -55,35 +53,15 @@
 			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
-	*/
 };
 
-/*
-// pins 0-23
 &gpio0 {
 	status = "okay";
 };
 
-// pins 40-71
 &gpio2 {
 	status = "okay";
 };
-
-// pins 72-73
-&gpio3 {
-	status = "okay";
-};
-*/
-
-/*
-&ohci {
-	status = "okay";
-};
-
-&ehci {
-	status = "okay";
-};
-*/
 
 &spi0 {
 	status = "okay";
@@ -113,20 +91,20 @@
 			read-only;
 		};
 
-/*
 		partition@50000 {
 			label = "firmware";
-			reg = <0x50000 0x790000>;
-		};
-*/
-		partition@50000 {
-			label = "firmware";
-			reg = <0x50000 0x680000>;
+			reg = <0x50000 0x760000>;
 		};
 
-		partition@6d0000 {
-			label = "stuff";
-			reg = <0x6d0000 0x110000>;
+		partition@7b0000 {
+			label = "traffic_meter";
+			reg = <0x7b0000 0x20000>;
+			read-only;
+		};
+
+		partition@7d0000 {
+			label = "pot";
+			reg = <0x7d0000 0x10000>;
 			read-only;
 		};
 
@@ -144,21 +122,18 @@
 	};
 };
 
-/*
 &pcie {
 	status = "okay";
 
-	pcie0 {
-		wifi@14c3,7662 {
-			compatible = "pci14c3,7662";
+	pcie-bridge {
+		mt76@0,0 {
 			reg = <0x0000 0 0 0 0 >;
+			device_type = "pci";
 			mediatek,mtd-eeprom = <&factory 0x8000>;
-			mtd-mac-address = <&factory 0x8004>;
 			ieee80211-freq-limit = <5000000 6000000>;
 		};
 	};
 };
-*/
 
 &ethernet {
 	mtd-mac-address = <&factory 0x28>;
@@ -166,7 +141,6 @@
 
 &wmac {
 	ralink,mtd-eeprom = <&factory 0x0>;
-	mtd-mac-address = <&factory 0x4>;
 };
 
 &pinctrl {
